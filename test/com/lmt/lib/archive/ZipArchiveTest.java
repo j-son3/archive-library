@@ -12,4 +12,9 @@ public class ZipArchiveTest extends ArchiveTest {
 	protected Path expectedPath() {
 		return TestData.ZIP_ARCHIVE;
 	}
+
+	@Override
+	protected boolean expectedCanFastOpen() {
+		return true;
+	}
 }

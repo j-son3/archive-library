@@ -35,6 +35,8 @@ public abstract class SzjbArchive extends Archive {
 	private List<ArchiveFormat> mFormats;
 	/** アーカイブI/F */
 	private IInArchive mArchive = null;
+	/** ソリッド書庫かどうか */
+	private boolean mIsSolid = false;
 	/** エントリ総数 */
 	private int mNumOfItem = 0;
 	/** パスによるエントリマップ */
@@ -148,6 +150,8 @@ public abstract class SzjbArchive extends Archive {
 				// 対応フォーマットの優先順にオープンを試みる
 				var format = mFormats.get(i);
 				mArchive = net.sf.sevenzipjbinding.SevenZip.openInArchive(format, raStream);
+				var solidProp = mArchive.getArchiveProperty(PropID.SOLID);
+				mIsSolid = (solidProp instanceof Boolean) && (Boolean)solidProp;
 				mNumOfItem = mArchive.getNumberOfItems();
 				break;
 			} catch (IOException e) {
@@ -244,7 +248,7 @@ public abstract class SzjbArchive extends Archive {
 	/** {@inheritDoc} */
 	@Override
 	protected int onGetCapability() {
-		return CAPS_INDEX | (mCached ? CAPS_PATH : 0);
+		return CAPS_INDEX | (mCached ? CAPS_PATH : 0) | (mIsSolid ? 0 : CAPS_FAST_OPEN);
 	}
 
 	/**

@@ -26,7 +26,7 @@ mvn clean install
 <dependency>
     <groupId>com.lmt</groupId>
     <artifactId>archive-library</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
 </dependency>
 ```
 

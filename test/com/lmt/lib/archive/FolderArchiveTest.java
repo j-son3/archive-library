@@ -12,4 +12,9 @@ public class FolderArchiveTest extends ArchiveTest {
 	protected Path expectedPath() {
 		return TestData.FOLDER_ARCHIVE;
 	}
+
+	@Override
+	protected boolean expectedCanFastOpen() {
+		return true;
+	}
 }

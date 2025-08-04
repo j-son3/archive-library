@@ -19,6 +19,7 @@ import org.junit.Test;
 public abstract class ArchiveTest {
 	protected abstract ArchiveType expectedArchiveType();
 	protected abstract Path expectedPath();
+	protected abstract boolean expectedCanFastOpen();
 
 	// 各テストケースではこのアーカイブでテストすること
 	private Archive mArchive = null;
@@ -777,6 +778,21 @@ public abstract class ArchiveTest {
 	public void testCanUsePath_NotOpen() throws Exception {
 		mArchive.close();
 		assertThrows(IllegalStateException.class, () -> mArchive.canUsePath());
+	}
+
+	// canFastOpen()
+	// 期待する値が返ること
+	@Test
+	public void testCanFastOpen_Normal() throws Exception {
+		assertEquals(expectedCanFastOpen(), mArchive.canFastOpen());
+	}
+
+	// canFastOpen()
+	// IllegalStateException アーカイブがオープンされていない
+	@Test
+	public void testCanFastOpen_NotOpen() throws Exception {
+		mArchive.close();
+		assertThrows(IllegalStateException.class, () -> mArchive.canFastOpen());
 	}
 
 	private int getIndexByPath(Path path) throws Exception {

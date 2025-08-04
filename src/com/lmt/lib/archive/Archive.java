@@ -26,6 +26,11 @@ public abstract class Archive implements Closeable {
 	protected static final int CAPS_PATH = 0x02;
 	/** 全ての手段でエントリ参照が可能であることを表す値 */
 	protected static final int CAPS_ALL = CAPS_INDEX | CAPS_PATH;
+	/**
+	 * 高速なランダムエントリ参照が可能であることを表すビット値
+	 * @since 1.1.0
+	 */
+	protected static final int CAPS_FAST_OPEN = 0x04;
 
 	/** アーカイブ種別 */
 	private ArchiveType mArchiveType;
@@ -349,6 +354,24 @@ public abstract class Archive implements Closeable {
 	public boolean canUsePath() {
 		assertIsOpen();
 		return (onGetCapability() & CAPS_PATH) != 0;
+	}
+
+	/**
+	 * 高速でランダムなエントリのオープンが可能かどうかを返します。
+	 * <p>標準ファイルシステム上のフォルダアーカイブや、ソリッド圧縮されていない圧縮ファイルアーカイブでは、
+	 * 比較的高速にランダムなエントリのオープンを行うことができます。一方、ソリッド圧縮された圧縮ファイルでは、
+	 * エントリによってはオープンが非常に低速になることがあり、アプリケーションのパフォーマンスが大幅に低下します。
+	 * 当メソッドを参照することによってそのようなリスクを伴うかどうかを判定することができるようになります。</p>
+	 * <p>ただし、アーカイブのサイズ・エントリ数・その他圧縮状況や格納先ストレージの動作速度によっては期待通りの性能を
+	 * 発揮できない場合があります。当メソッドが返す結果は絶対的な保証を伴うものではなく、
+	 * あくまで参考値として活用するようにしてください。</p>
+	 * @return 高速でランダムなエントリのオープンが期待できる場合はtrue、そうでなければfalse
+	 * @exception IllegalStateException アーカイブがオープンされていない
+	 * @since 1.1.0
+	 */
+	public boolean canFastOpen() {
+		assertIsOpen();
+		return (onGetCapability() & CAPS_FAST_OPEN) != 0;
 	}
 
 	/**

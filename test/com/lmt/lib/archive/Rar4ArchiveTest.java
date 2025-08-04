@@ -12,4 +12,9 @@ public class Rar4ArchiveTest extends ArchiveTest {
 	protected Path expectedPath() {
 		return TestData.RAR4_ARCHIVE;
 	}
+
+	@Override
+	protected boolean expectedCanFastOpen() {
+		return true;
+	}
 }

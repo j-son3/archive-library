@@ -159,7 +159,7 @@ public class FolderArchive extends Archive {
 	/** {@inheritDoc} */
 	@Override
 	protected int onGetCapability() {
-		return CAPS_PATH | (mCached ? CAPS_INDEX : 0);
+		return CAPS_PATH | (mCached ? CAPS_INDEX : 0) | CAPS_FAST_OPEN;
 	}
 
 	/**
